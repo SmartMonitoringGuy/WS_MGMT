@@ -1,9 +1,9 @@
 ########################################
-# WS MGMT Uptime Script                #
-# von Patrick Urfer      			   #
+# WS_MGMT_Uptime_Script                #
+# von Patrick Urfer      	       #
 # Automatisierung von Workstation MGMT #
-# Version: 06.08.2019				   #
-# 						   			   #
+# Version: 06.08.2019		       #
+# 				       #
 ########################################
 
 #Logging Funktion für PowerShell Skripts
