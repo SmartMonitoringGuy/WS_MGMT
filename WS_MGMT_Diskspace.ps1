@@ -40,7 +40,7 @@ $CurrentDate = Get-Date
 #Ausgabe für das Monitoring Dashboard
 Write-Host ""
 Write-Host "Skript wurde zuletzt am "$CurrentDate" ausgefuehrt!"
-Write-Log -Message 'WS_MGMT_Diskspace_and_Uptime: Die Diskspace ueberpruefung wurde ausgefuehrt' -Severity Information
+Write-Log -Message 'WS_MGMT_Diskspace: Die Diskspace ueberpruefung wurde ausgefuehrt' -Severity Information
 Write-Host ""
 ForEach($Disk in $Disks) {
 	#Der Eintrag DeviceID wird hinzugefügt, welcher den Namen des Drives Speichert
@@ -67,7 +67,7 @@ ForEach($Disk in $Disks) {
 	Write-Host ""
 	Write-Host "Der Verwendete Speicher betraegt: "$DriveUsed"%"
 	Write-Host ""
-	Write-Log -Message 'WS_MGMT_Diskspace_and_Uptime: Laufwerke wurde ueberprueft!' -Severity Information
+	Write-Log -Message 'WS_MGMT_Diskspace: Laufwerke wurde ueberprueft!' -Severity Information
 	
 	#Mittels If-Prüfung wird der Freie Speicherplatz sowie der Benutzte Speicherplatz auf jeweils 15GB oder 15% Speichervolumen überprüft
 	If($DriveFreeSpace -lt 15 -or $DriveUsed -lt 15) {
@@ -85,7 +85,7 @@ ForEach($Disk in $Disks) {
 		#Benachrichtigung für das Dashboard, für welches Laufwerk der Kunde informiert wurde
 		Write-Host ""
 		Write-Host "Der Kunde wurde informiert bezueglich dem Laufwerk: "$DriveName
-		Write-Log -Message 'WS_MGMT_Diskspace_and_Uptime: Der Kunde wurde informiert wegen mangelndem Speicherplatz!' -Severity Warning
+		Write-Log -Message 'WS_MGMT_Diskspace: Der Kunde wurde informiert wegen mangelndem Speicherplatz!' -Severity Warning
 		Write-Host ""
 	}
 }
