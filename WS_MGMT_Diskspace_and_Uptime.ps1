@@ -43,11 +43,11 @@ Function Get-Uptime{
         [Parameter(Mandatory=$True,ValueFromPipeline=$True)]
         $ComputerName
     )
-	#Definition des Verhaltens bei einem Fehler, Anwendung wird gestoppt
+    #Definition des Verhaltens bei einem Fehler, Anwendung wird gestoppt
     Begin{
         $ErrorActionPreference = 'Stop'
     }
-	#Definition des Prozesses
+    #Definition des Prozesses
     Process{
 	#Variable OS zieht sich mittels Get-WmiObject die Windows-basierte OS mit dme Parameter ComputerName
 	#welcher in die Gleichnameige Variabel gespeichert wird sowie mit der Definition der ErrorAction, hier mit SilentlyContinue
