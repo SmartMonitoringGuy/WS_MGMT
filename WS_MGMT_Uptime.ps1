@@ -10,55 +10,55 @@
 function Write-Log {
      [CmdletBinding()]
      param(
-		 #Parameter Message wird definiert als String und darf weder Null noch Leer sein
+	 #Parameter Message wird definiert als String und darf weder Null noch Leer sein
          [Parameter()]
          [ValidateNotNullOrEmpty()]
          [string]$Message,
 		 
-		 #Parameter Severity wird definiert als String mit einem ValidateSet definiert auf Information, Warning und Error und darf weder Null noch Leer sein
+	 #Parameter Severity wird definiert als String mit einem ValidateSet definiert auf Information, Warning und Error und darf weder Null noch Leer sein
          [Parameter()]
          [ValidateNotNullOrEmpty()]
          [ValidateSet('Information','Warning','Error')]
          [string]$Severity = 'Information'
      )
  
-	 #Mittels pscustomobjectwird ein Array erstellt welches die Zeitangaben beinhaltet sowie die Parameter Message und Severity
+     #Mittels pscustomobjectwird ein Array erstellt welches die Zeitangaben beinhaltet sowie die Parameter Message und Severity
      [pscustomobject]@{
          Time = (Get-Date -f g)
          Message = $Message
          Severity = $Severity
-		 #Diese werden mittels Out-File unter C:\Windows\Logs\BeispielLog.txt abgespeichert und für jeden neuen Logeintrag mittels -append erweitert
+       #Diese werden mittels Out-File unter C:\Windows\Logs\BeispielLog.txt abgespeichert und für jeden neuen Logeintrag mittels -append erweitert
      } | Out-File "C:\Windows\Logs\WSMGMTLog.txt" -Append
  }
 
 #Funktion für das Auslesen der Uptime des Geräts.
 Function Get-Uptime{
-	#CMDLetBinding für die Parameter übergabe der Abarbeitung
+    #CMDLetBinding für die Parameter übergabe der Abarbeitung
     [CMDLetBinding()]
     Param(
         [String]
-		#Mittels Parameter Mandatory, gibt man an das der Paramer pflicht ist
+	#Mittels Parameter Mandatory, gibt man an das der Paramer pflicht ist
         [Parameter(Mandatory=$True,ValueFromPipeline=$True)]
         $ComputerName
     )
-	#Definition des Verhaltens bei einem Fehler, Anwendung wird gestoppt
+    #Definition des Verhaltens bei einem Fehler, Anwendung wird gestoppt
     Begin{
         $ErrorActionPreference = 'Stop'
     }
-	#Definition des Prozesses
+    #Definition des Prozesses
     Process{
-		#Variable OS zieht sich mittels Get-WmiObject die Windows-basierte OS mit dme Parameter ComputerName
-		#welcher in die Gleichnameige Variabel gespeichert wird sowie mit der Definition der ErrorAction, hier mit SilentlyContinue
+	#Variable OS zieht sich mittels Get-WmiObject die Windows-basierte OS mit dme Parameter ComputerName
+	#welcher in die Gleichnameige Variabel gespeichert wird sowie mit der Definition der ErrorAction, hier mit SilentlyContinue
         $OS = Get-WmiObject win32_operatingsystem -ComputerName $ComputerName -ErrorAction SilentlyContinue
-		#Überprüfung der Daten des WmiObjects auf die Daten 
+	#Überprüfung der Daten des WmiObjects auf die Daten 
         If($OS) {
-			#Es wird eine Hashtable generiert
+	    #Es wird eine Hashtable generiert
             $Computer = @{}
-			#Der Eintrag Uptime wird der Hashtable hinzugefügt, welches dem Aktuellen Datum und Zeit entspricht, minus des Datum und Zeit des letzten BootUp
+	    #Der Eintrag Uptime wird der Hashtable hinzugefügt, welches dem Aktuellen Datum und Zeit entspricht, minus des Datum und Zeit des letzten BootUp
             $Computer.Uptime = [DateTime](Get-Date) - [DateTime]$OS.ConvertToDateTime($OS.LastBootUpTime)
-			#Es wird der Hashtable eintrag ComputerName generiert mit den Daten aus der Variabel ComputerName
+	    #Es wird der Hashtable eintrag ComputerName generiert mit den Daten aus der Variabel ComputerName
             $Computer.ComputerName = $ComputerName
-			#Es wird die Hashtable Computer zurückgegeben
+	    #Es wird die Hashtable Computer zurückgegeben
             Return $Computer
         }
     }
