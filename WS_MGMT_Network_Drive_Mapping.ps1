@@ -1,8 +1,8 @@
 ########################################
 # WS_MGMT_Network_Drive_Mapping        #
-# von Patrick Urfer      			   #
+# von Patrick Urfer      	       #
 # Skript für Workstation Management    #
-# Version: 06.08.2019    			   #
+# Version: 06.08.2019    	       #
 #                                      #
 ########################################
 
