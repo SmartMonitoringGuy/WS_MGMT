@@ -1,10 +1,12 @@
 ########################################
 # WS MGMT Deactivate Driver Update     #
-# von Patrick Urfer      			   #
+# von Patrick Urfer      			         #
 # Automatisierung von Workstation MGMT #
-# Version: 30.07.2019				   #
-#               					   #
+# Version: 30.07.2019				           #
+#               					             #
 ########################################
+
+
 
 $registryPath = "HKLM:\Software\Microsoft\Windows"
 $name = "ExcludeWUDriversInQualityUpdate"
