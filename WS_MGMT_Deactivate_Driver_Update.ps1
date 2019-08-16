@@ -1,5 +1,5 @@
 ########################################
-# WS MGMT Deactivate Driver Update     #
+# WS_MGMT_Deactivate_Driver_Update     #
 # von Patrick Urfer      			         #
 # Automatisierung von Workstation MGMT #
 # Version: 30.07.2019				           #
