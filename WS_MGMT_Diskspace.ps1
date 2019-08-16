@@ -1,3 +1,13 @@
+########################################
+# WS_MGMT_Diskspace_Script             #
+# von Patrick Urfer      	       #
+# Automatisierung von Workstation MGMT #
+# Version: 30.07.2019		       #
+# 				       #
+########################################
+
+
+
 #Variabel Disks zieht das WmiObject Win32_LogicalDisk für die Informationen der jeweiligen Festplatten
 $Disks = Get-WmiObject -Class Win32_LogicalDisk
 #Aktuelles Datum in $CurrentDate speichern
