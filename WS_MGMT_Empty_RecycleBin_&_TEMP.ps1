@@ -1,9 +1,9 @@
 ########################################
-# WS_MGMT_Empty_RecycleBin_&_TEMP 	   #
-# von Patrick Urfer      			   #
+# WS_MGMT_Empty_RecycleBin_&_TEMP      #
+# von Patrick Urfer      	       #
 # Automatisierung von Workstation MGMT #
-# Version: 30.07.2019				   #
-# 						   			   #
+# Version: 30.07.2019		       #
+# 				       #
 ########################################
 
 
