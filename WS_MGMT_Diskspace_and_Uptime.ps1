@@ -73,7 +73,7 @@ $CurrentDate = Get-Date
 #Ausgabe für das Monitoring Dashboard
 Write-Host ""
 Write-Host "Skript wurde zuletzt am "$CurrentDate" ausgefuehrt!"
-Write-Log -Message 'WS_MGMT_Diskspace_and_Uptime: Skript wurde ausgefuehrt!' -Severity Information
+Write-Log -Message 'WS_MGMT_Uptime: Skript wurde ausgefuehrt!' -Severity Information
 Write-Host ""
 #In dem ForEach Loop wird nun für jede Uptime in mehreren Uptimes
 ForEach($Uptime in $Uptimes){
@@ -91,55 +91,54 @@ ForEach($Uptime in $Uptimes){
 		#Benachrichtigung für das Dashboard, für welches Laufwerk der Kunde informiert wurde
 		Write-Host ""
 		Write-Host "Der Kunde wurde informiert bezueglich der Uptime: "$Uptime.Uptime.Days
-		Write-Log -Message 'WS_MGMT_Diskspace_and_Uptime: Der Kunde wurde informiert bezueglich der Uptime' -Severity Information
+		Write-Log -Message 'WS_MGMT_Uptime: Der Kunde wurde informiert bezueglich der Uptime' -Severity Information
 		Write-Host ""
-		If($Uptime.Uptime.Days -gt "14" -and $Uptime.Uptime.Days -lt "28") {
-			#Deaktivieren von Windows 10 Fastboot mittels PowerShell
-			#/v is das REG_DWORD /t Spezifiziert den Typ des Registry-Eintrags /d Spezifiziert die Daten für den neuen Eintrag /f Fügt oder löscht den Registry Eintrag hinzu ohne Bestätigung.
-			REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v HiberbootEnabled /t REG_DWORD /d "0" /f
-			Write-Host ""
-			Write-Host "Der Fastboot-Modus wurde mittels Registry Eintrag disabled"
-			Write-Log -Message 'WS_MGMT_Diskspace_and_Uptime: Der Fastboot-Modus wurde mittels Registry Eintrag disabled: ' -Severity Warning
-			Write-Host ""
-			If($Uptime.Uptime.Days -gt "28") {
-				Add-Type -AssemblyName System.Windows.Forms			
-				$msgBoxInput =  [System.Windows.Forms.MessageBox]::Show('Bitte Neustart durchfuehren, Ihr Geraet wurde bereits mehr als 28 Tage nicht neu gestartet!','Neustart durchfuehren',4,'Error')
-				if ($msgBoxInput -eq 'YES'){
+	}
+	If($Uptime.Uptime.Days -gt "14" -and $Uptime.Uptime.Days -lt "28") {
+		#Deaktivieren von Windows 10 Fastboot mittels PowerShell
+		#/v is das REG_DWORD /t Spezifiziert den Typ des Registry-Eintrags /d Spezifiziert die Daten für den neuen Eintrag /f Fügt oder löscht den Registry Eintrag hinzu ohne Bestätigung.
+		REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v HiberbootEnabled /t REG_DWORD /d "0" /f
+		Write-Host ""
+		Write-Host "Der Fastboot-Modus wurde mittels Registry Eintrag disabled"
+		Write-Log -Message 'WS_MGMT_Uptime: Der Fastboot-Modus wurde mittels Registry Eintrag disabled: ' -Severity Information
+		Write-Host ""
+	}
+	If($Uptime.Uptime.Days -gt "28") {
+		Add-Type -AssemblyName System.Windows.Forms			
+		$msgBoxInput =  [System.Windows.Forms.MessageBox]::Show('Bitte Neustart durchfuehren, Ihr Geraet wurde bereits mehr als 28 Tage nicht neu gestartet!','Neustart durchfuehren',4,'Error')
+			if ($msgBoxInput -eq 'YES'){
+				Write-Host ""
+				Write-Host "Der Benutzer hat im Neustart Dialog, ausgewaehlt das der Neustart durchgefuehrt wird"
+				Write-Log -Message 'WS_MGMT_Uptime: Der Benutzer hat im Neustart Dialog, ausgewaehlt das der Neustart durchgefuehrt wird' -Severity Information
+				Write-Host ""
+				$msgBoxInputConfirmation =  [System.Windows.Forms.MessageBox]::Show('Bestaetigung Neustart, Sind Sie sicher das der Neustart durchgefuehrt werden soll?','Neustart durchfuehren',4,'Warning')
+				if ($msgBoxInputConfirmation -eq 'YES') {
 					Write-Host ""
-					Write-Host "Der Benutzer hat im Neustart Dialog, ausgewaehlt das der Neustart durchgefuehrt wird"
-					Write-Log -Message 'WS_MGMT_Diskspace_and_Uptime: Der Benutzer hat im Neustart Dialog, ausgewaehlt das der Neustart durchgefuehrt wird' -Severity Information
+					Write-Host "Der Benutzer hat im Bestaetigungs Dialog fuer den Neustart, ausgewaehlt das der Neustart durchgefuehrt wird"
+					Write-Log -Message 'WS_MGMT_Uptime: Der Benutzer hat im Bestaetigungs Dialog fuer den Neustart, ausgewaehlt das der Neustart durchgefuehrt wird' -Severity Information
 					Write-Host ""
-					$msgBoxInputConfirmation =  [System.Windows.Forms.MessageBox]::Show('Bitte Neustart durchfuehren, Ihr Geraet wurde bereits mehr als 28 Tage nicht neu gestartet!','Neustart durchfuehren',4,'Warning')
-					if ($msgBoxInputConfirmation -eq 'YES') {
-						Write-Host ""
-						Write-Host "Der Benutzer hat im Bestaetigungs Dialog fuer den Neustart, ausgewaehlt das der Neustart durchgefuehrt wird"
-						Write-Log -Message 'WS_MGMT_Diskspace_and_Uptime: Der Benutzer hat im Bestaetigungs Dialog fuer den Neustart, ausgewaehlt das der Neustart durchgefuehrt wird' -Severity Information
-						Write-Host ""
-						$msgBoxInput = [System.Windows.Forms.DialogResult]::Cancel
-						##Neustart erfolgt sofort
-						Restart-Computer -Force
-						}
-					Else {
-						Write-Host ""
-						Write-Host "Der Benutzer hat im im Bestaetigungs Dialog fuer den Neustart, ausgewaehlt das der Neustart abgebrochen wird"
-						Write-Log -Message 'WS_MGMT_Diskspace_and_Uptime: Der Benutzer hat im im Bestaetigungs Dialog fuer den Neustart, ausgewaehlt das der Neustart abgebrochen wird' -Severity Warning
-						Write-Host ""
-						##Neustart wird  abgebrochen
-						$msgBoxInputConfirmation = [System.Windows.Forms.DialogResult]::Cancel
-						}
-				}
+					$msgBoxInput = [System.Windows.Forms.DialogResult]::Cancel
+					##Neustart erfolgt sofort
+					Restart-Computer -Force
+					}
 				Else {
 					Write-Host ""
-					Write-Host "Der Benutzer hat im Neustart Dialog, ausgewaehlt das der Neustart abgebrochen wird"
-					Write-Log -Message 'WS_MGMT_Diskspace_and_Uptime: Der Benutzer hat im Neustart Dialog, ausgewaehlt das der Neustart abgebrochen wird' -Severity Warning
+					Write-Host "Der Benutzer hat im im Bestaetigungs Dialog fuer den Neustart, ausgewaehlt das der Neustart abgebrochen wird"
+					Write-Log -Message 'WS_MGMT_Uptime: Der Benutzer hat im im Bestaetigungs Dialog fuer den Neustart, ausgewaehlt das der Neustart abgebrochen wird' -Severity Warning
 					Write-Host ""
 					##Neustart wird  abgebrochen
-					$msgBoxInput = [System.Windows.Forms.DialogResult]::Cancel
-				}	
-			}			
-				
-		}
-	}	
+					$msgBoxInputConfirmation = [System.Windows.Forms.DialogResult]::Cancel
+					}
+			}
+			Else {
+				Write-Host ""
+				Write-Host "Der Benutzer hat im Neustart Dialog, ausgewaehlt das der Neustart abgebrochen wird"
+				Write-Log -Message 'WS_MGMT_Uptime: Der Benutzer hat im Neustart Dialog, ausgewaehlt das der Neustart abgebrochen wird' -Severity Warning
+				Write-Host ""
+				##Neustart wird  abgebrochen
+				$msgBoxInput = [System.Windows.Forms.DialogResult]::Cancel
+			}	
+	}					
 }
 
 #Variabel Disks zieht das WmiObject Win32_LogicalDisk für die Informationen der jeweiligen Festplatten
