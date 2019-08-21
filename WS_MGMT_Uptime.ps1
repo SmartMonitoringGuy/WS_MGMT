@@ -76,7 +76,7 @@ Write-Host ""
 #In dem ForEach Loop wird nun für jede Uptime in mehreren Uptimes
 ForEach($Uptime in $Uptimes){
 	#Im If Statement wird überprüft ob die Uptime Grösser als 7 Tage ist und Falls ja wird mittels Bubble Notification dem User eine Ausgabe eingeblendet.
-    If($Uptime.Uptime.Days -gt "7" -and $Uptime.Uptime.Days -lt "14") {
+    If($Uptime.Uptime.Days -ge "7") {
         Add-Type -AssemblyName System.Windows.Forms 
 		$global:balloon = New-Object System.Windows.Forms.NotifyIcon
 		$path = (Get-Process -id $pid).Path
@@ -92,7 +92,7 @@ ForEach($Uptime in $Uptimes){
 		Write-Log -Message 'WS_MGMT_Uptime: Der Kunde wurde informiert bezueglich der Uptime' -Severity Information
 		Write-Host ""
 	}
-	If($Uptime.Uptime.Days -gt "14" -and $Uptime.Uptime.Days -lt "28") {
+	If($Uptime.Uptime.Days -ge "14") {
 		#Deaktivieren von Windows 10 Fastboot mittels PowerShell
 		#/v is das REG_DWORD /t Spezifiziert den Typ des Registry-Eintrags /d Spezifiziert die Daten für den neuen Eintrag /f Fügt oder löscht den Registry Eintrag hinzu ohne Bestätigung.
 		REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v HiberbootEnabled /t REG_DWORD /d "0" /f
@@ -101,7 +101,7 @@ ForEach($Uptime in $Uptimes){
 		Write-Log -Message 'WS_MGMT_Uptime: Der Fastboot-Modus wurde mittels Registry Eintrag disabled: ' -Severity Information
 		Write-Host ""
 	}
-	If($Uptime.Uptime.Days -gt "28") {
+	If($Uptime.Uptime.Days -ge "28") {
 		Add-Type -AssemblyName System.Windows.Forms			
 		$msgBoxInput =  [System.Windows.Forms.MessageBox]::Show('Bitte Neustart durchfuehren, Ihr Geraet wurde bereits mehr als 28 Tage nicht neu gestartet!','Neustart durchfuehren',4,'Error')
 			if ($msgBoxInput -eq 'YES'){
